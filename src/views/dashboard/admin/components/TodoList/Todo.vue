@@ -59,15 +59,15 @@ export default class extends Vue {
   private editing = false
 
   private deleteTodo(todo: ITodo) {
-    this.$emit('delete-todo', todo)
+    this.$emit('deleteTodo', todo)
   }
 
   private editTodo({ todo, value }: { todo: ITodo, value: string }) {
-    this.$emit('edit-todo', { todo, value })
+    this.$emit('editTodo', { todo, value })
   }
 
   private toggleTodo(todo: ITodo) {
-    this.$emit('toggle-todo', todo)
+    this.$emit('toggleTodo', todo)
   }
 
   private doneEdit(e: KeyboardEvent) {

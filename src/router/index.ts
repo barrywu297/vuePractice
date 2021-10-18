@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import Router, { RouteConfig } from 'vue-router'
 
 /* Layout */
 import Layout from '@/layout/index.vue'
@@ -9,8 +9,10 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import { playerRoutes } from './modules/players'
+import { heroRoutes } from './modules/heros'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
 /*
   Note: sub-menu only appear when children.length>=1
@@ -201,6 +203,8 @@ export const asyncRoutes: RouteConfig[] = [
   },
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
+  playerRoutes,
+  heroRoutes,
   chartsRouter,
   nestedRouter,
   tableRouter,
@@ -426,11 +430,17 @@ export const asyncRoutes: RouteConfig[] = [
     ]
   },
   {
-    path: 'https://github.com/Armour/vue-typescript-admin-template',
-    meta: {
-      title: 'externalLink',
-      icon: 'link'
-    }
+    path: 'external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://github.com/Armour/vue-typescript-admin-template',
+        meta: {
+          title: 'externalLink',
+          icon: 'link'
+        }
+      }
+    ]
   },
   {
     path: '*',
@@ -439,8 +449,8 @@ export const asyncRoutes: RouteConfig[] = [
   }
 ]
 
-const createRouter = () => new VueRouter({
-  // mode: 'history',  // Disabled due to Github Pages doesn't support this, enable this if you need.
+const createRouter = () => new Router({
+  mode: 'history',  // Disabled due to Github Pages doesn't support this, enable this if you need.
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
       return savedPosition

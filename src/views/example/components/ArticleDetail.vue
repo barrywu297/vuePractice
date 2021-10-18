@@ -202,7 +202,6 @@ export default class extends Vue {
       callback()
     }
   }
-
   private validateSourceUrl = (rule: any, value: string, callback: any) => {
     if (value) {
       if (isValidURL(value)) {
@@ -218,7 +217,6 @@ export default class extends Vue {
       callback()
     }
   }
-
   private postForm = Object.assign({}, defaultArticleData)
   private loading = false
   private userListOptions = []
@@ -228,7 +226,6 @@ export default class extends Vue {
     fullContent: [{ validator: this.validateRequire }],
     sourceURL: [{ validator: this.validateSourceUrl, trigger: 'blur' }]
   }
-
   private tempTagView?: ITagView
   private tinymceActive = true
 

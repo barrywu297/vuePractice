@@ -4,7 +4,7 @@
       id="hamburger-container"
       :is-active="sidebar.opened"
       class="hamburger-container"
-      @toggle-click="toggleSideBar"
+      @toggleClick="toggleSideBar"
     />
     <breadcrumb
       id="breadcrumb-container"
@@ -117,9 +117,7 @@ export default class extends Vue {
 
   private async logout() {
     await UserModule.LogOut()
-    this.$router.push(`/login?redirect=${this.$route.fullPath}`).catch(err => {
-      console.warn(err)
-    })
+    this.$router.push(`/login?redirect=${this.$route.fullPath}`)
   }
 }
 </script>

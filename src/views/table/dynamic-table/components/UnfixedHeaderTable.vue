@@ -31,8 +31,8 @@
         :key="fruit"
         :label="fruit"
       >
-        <template slot-scope="{row}">
-          {{ row[fruit] }}
+        <template slot-scope="scope">
+          {{ scope.row[fruit] }}
         </template>
       </el-table-column>
     </el-table>
@@ -60,7 +60,6 @@ export default class extends Vue {
       orange: 'orange-20'
     }
   ]
-
   private formThead = ['apple', 'banana']
 }
 </script>

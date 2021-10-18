@@ -32,7 +32,7 @@
         <el-option
           v-for="item in calendarTypeOptions"
           :key="item.key"
-          :label="item.displayName+'('+item.key+')'"
+          :label="item.display_name+'('+item.key+')'"
           :value="item.key"
         />
       </el-select>
@@ -105,8 +105,8 @@
         width="80"
         :class-name="getSortClass('id')"
       >
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -114,8 +114,8 @@
         width="180px"
         align="center"
       >
-        <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime }}</span>
+        <template slot-scope="scope">
+          <span>{{ scope.row.timestamp | parseTime }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -135,8 +135,8 @@
         width="180px"
         align="center"
       >
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+        <template slot-scope="scope">
+          <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -145,17 +145,17 @@
         width="110px"
         align="center"
       >
-        <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
+        <template slot-scope="scope">
+          <span style="color:red;">{{ scope.row.reviewer }}</span>
         </template>
       </el-table-column>
       <el-table-column
         :label="$t('table.importance')"
         width="105px"
       >
-        <template slot-scope="{row}">
+        <template slot-scope="scope">
           <svg-icon
-            v-for="n in +row.importance"
+            v-for="n in +scope.row.importance"
             :key="n"
             name="star"
             class="meta-item__icon"
@@ -193,7 +193,7 @@
         width="230"
         class-name="fixed-width"
       >
-        <template slot-scope="{row, $index}">
+        <template slot-scope="{row}">
           <el-button
             type="primary"
             size="mini"
@@ -220,7 +220,7 @@
             v-if="row.status!=='deleted'"
             size="mini"
             type="danger"
-            @click="handleDelete(row, $index)"
+            @click="handleModifyStatus(row,'deleted')"
           >
             {{ $t('table.delete') }}
           </el-button>
@@ -260,7 +260,7 @@
             <el-option
               v-for="item in calendarTypeOptions"
               :key="item.key"
-              :label="item.displayName"
+              :label="item.display_name"
               :value="item.key"
             />
           </el-select>
@@ -372,15 +372,15 @@ import { formatJson } from '@/utils'
 import Pagination from '@/components/Pagination/index.vue'
 
 const calendarTypeOptions = [
-  { key: 'CN', displayName: 'China' },
-  { key: 'US', displayName: 'USA' },
-  { key: 'JP', displayName: 'Japan' },
-  { key: 'EU', displayName: 'Eurozone' }
+  { key: 'CN', display_name: 'China' },
+  { key: 'US', display_name: 'USA' },
+  { key: 'JP', display_name: 'Japan' },
+  { key: 'EU', display_name: 'Eurozone' }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc: { [key: string]: string }, cur) => {
-  acc[cur.key] = cur.displayName
+  acc[cur.key] = cur.display_name
   return acc
 }, {}) as { [key: string]: string }
 
@@ -408,14 +408,12 @@ export default class extends Vue {
     type: undefined,
     sort: '+id'
   }
-
   private importanceOptions = [1, 2, 3]
   private calendarTypeOptions = calendarTypeOptions
   private sortOptions = [
     { label: 'ID Ascending', key: '+id' },
     { label: 'ID Descending', key: '-id' }
   ]
-
   private statusOptions = ['published', 'draft', 'deleted']
   private showReviewer = false
   private dialogFormVisible = false
@@ -424,7 +422,6 @@ export default class extends Vue {
     update: 'Edit',
     create: 'Create'
   }
-
   private dialogPageviewsVisible = false
   private pageviewsData = []
   private rules = {
@@ -432,7 +429,6 @@ export default class extends Vue {
     timestamp: [{ required: true, message: 'timestamp is required', trigger: 'change' }],
     title: [{ required: true, message: 'title is required', trigger: 'blur' }]
   }
-
   private downloadLoading = false
   private tempArticleData = defaultArticleData
 
@@ -482,7 +478,7 @@ export default class extends Vue {
 
   private getSortClass(key: string) {
     const sort = this.listQuery.sort
-    return sort === `+${key}` ? 'ascending' : 'descending'
+    return sort === `+${key}` ? 'ascending' : sort === `-${key}` ? 'descending' : ''
   }
 
   private resetTempArticleData() {
@@ -494,18 +490,16 @@ export default class extends Vue {
     this.dialogStatus = 'create'
     this.dialogFormVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs['dataForm'] as Form).clearValidate()
     })
   }
 
   private createData() {
-    (this.$refs.dataForm as Form).validate(async(valid) => {
+    (this.$refs['dataForm'] as Form).validate(async(valid) => {
       if (valid) {
-        const articleData = this.tempArticleData
-        articleData.id = Math.round(Math.random() * 100) + 1024 // mock a id
+        let { id, ...articleData } = this.tempArticleData
         articleData.author = 'vue-typescript-admin'
         const { data } = await createArticle({ article: articleData })
-        data.article.timestamp = Date.parse(data.article.timestamp)
         this.list.unshift(data.article)
         this.dialogFormVisible = false
         this.$notify({
@@ -524,18 +518,23 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogFormVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs['dataForm'] as Form).clearValidate()
     })
   }
 
   private updateData() {
-    (this.$refs.dataForm as Form).validate(async(valid) => {
+    (this.$refs['dataForm'] as Form).validate(async(valid) => {
       if (valid) {
         const tempData = Object.assign({}, this.tempArticleData)
         tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
         const { data } = await updateArticle(tempData.id, { article: tempData })
-        const index = this.list.findIndex(v => v.id === data.article.id)
-        this.list.splice(index, 1, data.article)
+        for (const v of this.list) {
+          if (v.id === data.article.id) {
+            const index = this.list.indexOf(v)
+            this.list.splice(index, 1, data.article)
+            break
+          }
+        }
         this.dialogFormVisible = false
         this.$notify({
           title: '成功',
@@ -547,18 +546,8 @@ export default class extends Vue {
     })
   }
 
-  private handleDelete(row: any, index: number) {
-    this.$notify({
-      title: 'Success',
-      message: 'Delete Successfully',
-      type: 'success',
-      duration: 2000
-    })
-    this.list.splice(index, 1)
-  }
-
   private async handleGetPageviews(pageviews: string) {
-    const { data } = await getPageviews({ pageviews })
+    const { data } = await getPageviews({ /* Your params here */ })
     this.pageviewsData = data.pageviews
     this.dialogPageviewsVisible = true
   }

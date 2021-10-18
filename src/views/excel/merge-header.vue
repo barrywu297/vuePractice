@@ -24,8 +24,8 @@
         label="Id"
         width="95"
       >
-        <template slot-scope="{$index}">
-          {{ $index }}
+        <template slot-scope="scope">
+          {{ scope.$index }}
         </template>
       </el-table-column>
       <el-table-column
@@ -33,8 +33,8 @@
         align="center"
       >
         <el-table-column label="Title">
-          <template slot-scope="{row}">
-            {{ row.title }}
+          <template slot-scope="scope">
+            {{ scope.row.title }}
           </template>
         </el-table-column>
         <el-table-column
@@ -42,8 +42,8 @@
           align="center"
           width="180"
         >
-          <template slot-scope="{row}">
-            <el-tag>{{ row.author }}</el-tag>
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.author }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -51,8 +51,8 @@
           align="center"
           width="115"
         >
-          <template slot-scope="{row}">
-            {{ row.pageviews }}
+          <template slot-scope="scope">
+            {{ scope.row.pageviews }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -61,9 +61,9 @@
         label="Date"
         width="220"
       >
-        <template slot-scope="{row}">
+        <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ row.timestamp | parseTime }}</span>
+          <span>{{ scope.row.timestamp | parseTime }}</span>
         </template>
       </el-table-column>
     </el-table>

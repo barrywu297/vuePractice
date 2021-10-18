@@ -27,9 +27,9 @@
           v-for="(todo, index) in filteredTodos"
           :key="index"
           :todo="todo"
-          @toggle-todo="toggleTodo"
-          @edit-todo="editTodo"
-          @delete-todo="deleteTodo"
+          @toggleTodo="toggleTodo"
+          @editTodo="editTodo"
+          @deleteTodo="deleteTodo"
         />
       </ul>
     </section>

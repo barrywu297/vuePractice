@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen.svg" alt="vue">
   </a>
   <a href="https://github.com/ElemeFE/element">
-    <img src="https://img.shields.io/badge/element--ui-2.15.1-brightgreen.svg" alt="element-ui">
+    <img src="https://img.shields.io/badge/element--ui-2.12.0-brightgreen.svg" alt="element-ui">
   </a>
   <a href="https://circleci.com/gh/Armour/vue-typescript-admin-template/tree/master">
     <img src="https://circleci.com/gh/Armour/vue-typescript-admin-template/tree/master.svg?style=shield" alt="CircleCI">
@@ -169,6 +169,7 @@ Understanding and learning these knowledge in advance will greatly help you on u
 ├── .env.xxx                   # env variable configuration
 ├── .eslintrc.js               # eslint config
 ├── babel.config.js            # babel config
+├── cypress.json               # e2e test config
 ├── jest.config.js             # jest unit test config
 ├── package.json               # package.json
 ├── postcss.config.js          # postcss config
@@ -208,6 +209,12 @@ yarn run lint
 
 ```bash
 yarn run test:unit
+```
+
+#### Run your end-to-end tests
+
+```bash
+yarn run test:e2e
 ```
 
 #### Generate all svg components

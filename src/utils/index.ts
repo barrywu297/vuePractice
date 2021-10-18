@@ -1,9 +1,9 @@
 // Parse the time to string
 export const parseTime = (
-  time?: object | string | number | null,
+  time?: object | string | number,
   cFormat?: string
 ): string | null => {
-  if (time === undefined || !time) {
+  if (time === undefined) {
     return null
   }
   const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
@@ -11,15 +11,8 @@ export const parseTime = (
   if (typeof time === 'object') {
     date = time as Date
   } else {
-    if (typeof time === 'string') {
-      if (/^[0-9]+$/.test(time)) {
-        // support "1548221490638"
-        time = parseInt(time)
-      } else {
-        // support safari
-        // https://stackoverflow.com/questions/4310953/invalid-date-in-safari
-        time = time.replace(/-/gm, '/')
-      }
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
+      time = parseInt(time)
     }
     if (typeof time === 'number' && time.toString().length === 10) {
       time = time * 1000

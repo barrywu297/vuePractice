@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import * as echarts from 'echarts'
+import echarts, { EChartOption } from 'echarts'
 import { Component, Prop } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
 import ResizeMixin from '@/components/Charts/mixins/resize'
@@ -61,7 +61,7 @@ export default class extends mixins(ResizeMixin) {
         indicator: [
           { name: 'Sales', max: 10000 },
           { name: 'Administration', max: 20000 },
-          { name: 'Information Technology', max: 20000 },
+          { name: 'Information Techology', max: 20000 },
           { name: 'Customer Support', max: 20000 },
           { name: 'Development', max: 20000 },
           { name: 'Marketing', max: 20000 }
@@ -98,7 +98,7 @@ export default class extends mixins(ResizeMixin) {
         ],
         animationDuration: animationDuration
       }]
-    })
+    } as EChartOption<EChartOption.SeriesRadar>)
   }
 }
 </script>

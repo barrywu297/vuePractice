@@ -30,7 +30,7 @@
         <el-progress :percentage="45" />
       </div>
       <div class="progress-item">
-        <span>CSS</span>
+        <span>Css</span>
         <el-progress :percentage="4" />
       </div>
       <div class="progress-item">
@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
 import PanThumb from '@/components/PanThumb/index.vue'
 import Mallki from '@/components/TextHoverEffect/Mallki.vue'

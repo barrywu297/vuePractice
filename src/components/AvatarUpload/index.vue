@@ -35,17 +35,15 @@ export default class extends Vue {
   @Prop({ required: true }) private field!: string
   @Prop({ default: 300 }) private width!: number
   @Prop({ default: 300 }) private height!: number
-  @Prop({ default: () => null }) private params!: object
-  @Prop({ default: () => null }) private headers!: object
+  @Prop({ default: () => {} }) private params!: object
+  @Prop({ default: () => {} }) private headers!: object
 
   // https://github.com/dai-siki/vue-image-crop-upload#language-package
   private languageTypeList: { [key: string]: string } = {
-    en: 'en',
-    zh: 'zh',
-    es: 'es-MX',
-    ja: 'ja',
-    ko: 'ko',
-    it: 'it'
+    'en': 'en',
+    'zh': 'zh',
+    'es': 'es-MX',
+    'ja': 'ja'
   }
 
   get show() {

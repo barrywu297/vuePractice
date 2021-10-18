@@ -17,8 +17,8 @@
         label="Role Key"
         width="220"
       >
-        <template slot-scope="{row}">
-          {{ row.key }}
+        <template slot-scope="scope">
+          {{ scope.row.key }}
         </template>
       </el-table-column>
       <el-table-column
@@ -26,16 +26,16 @@
         label="Role Name"
         width="220"
       >
-        <template slot-scope="{row}">
-          {{ row.name }}
+        <template slot-scope="scope">
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column
         align="header-center"
         label="Description"
       >
-        <template slot-scope="{row}">
-          {{ row.description }}
+        <template slot-scope="scope">
+          {{ scope.row.description }}
         </template>
       </el-table-column>
       <el-table-column
@@ -120,22 +120,23 @@ import { cloneDeep } from 'lodash'
 import { Component, Vue } from 'vue-property-decorator'
 import { RouteConfig } from 'vue-router'
 import { Tree } from 'element-ui'
+import { AppModule } from '@/store/modules/app'
 import { getRoutes, getRoles, createRole, deleteRole, updateRole } from '@/api/roles'
 
-interface IRole {
+interface Role {
   key: number
   name: string
   description: string
   routes: RouteConfig[]
 }
 
-interface IRoutesTreeData {
-  children: IRoutesTreeData[]
+interface RoutesTreeData {
+  children: RoutesTreeData[]
   title: string
   path: string
 }
 
-const defaultRole: IRole = {
+const defaultRole: Role = {
   key: 0,
   name: '',
   description: '',
@@ -149,7 +150,7 @@ export default class extends Vue {
   private role = Object.assign({}, defaultRole)
   private reshapedRoutes: RouteConfig[] = []
   private serviceRoutes: RouteConfig[] = []
-  private rolesList: IRole[] = []
+  private rolesList: Role[] = []
   private dialogVisible = false
   private dialogType = 'new'
   private checkStrictly = false
@@ -180,9 +181,9 @@ export default class extends Vue {
   }
 
   private generateTreeData(routes: RouteConfig[]) {
-    const data: IRoutesTreeData[] = []
-    for (const route of routes) {
-      const tmp: IRoutesTreeData = {
+    const data: RoutesTreeData[] = []
+    for (let route of routes) {
+      const tmp: RoutesTreeData = {
         children: [],
         title: '',
         path: ''

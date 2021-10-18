@@ -596,11 +596,17 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: 'https://github.com/Armour/vue-typescript-admin-template',
-    meta: {
-      title: 'externalLink',
-      icon: 'link'
-    }
+    path: 'external-link',
+    component: 'Layout',
+    children: [
+      {
+        path: 'https://github.com/Armour/vue-typescript-admin-template',
+        meta: {
+          title: 'externalLink',
+          icon: 'link'
+        }
+      }
+    ]
   },
   {
     path: '*',

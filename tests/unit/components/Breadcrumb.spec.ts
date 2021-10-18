@@ -53,67 +53,58 @@ const router = new VueRouter({
   routes
 })
 
-const wrapper = mount(Breadcrumb, {
-  localVue,
-  router,
-  mocks: {
-    $t: (msg: string) => msg
-  }
-})
-
 describe('Breadcrumb.vue', () => {
-  it('dashboard', async() => {
+  const wrapper = mount(Breadcrumb, {
+    localVue,
+    router,
+    mocks: {
+      $t: (msg: string) => msg
+    }
+  })
+
+  it('dashboard', () => {
     router.push('/dashboard')
-    await wrapper.vm.$nextTick()
-    const len = wrapper.findAll('.el-breadcrumb__item').length
+    const len = wrapper.findAll('.el-breadcrumb__inner').length
     expect(len).toBe(1)
   })
 
-  it('normal route', async() => {
+  it('normal route', () => {
     router.push('/menu/menu1')
-    await wrapper.vm.$nextTick()
-    const len = wrapper.findAll('.el-breadcrumb__item').length
+    const len = wrapper.findAll('.el-breadcrumb__inner').length
     expect(len).toBe(2)
   })
 
-  it('nested route', async() => {
+  it('nested route', () => {
     router.push('/menu/menu1/menu1-2/menu1-2-1')
-    await wrapper.vm.$nextTick()
-    const len = wrapper.findAll('.el-breadcrumb__item').length
+    const len = wrapper.findAll('.el-breadcrumb__inner').length
     expect(len).toBe(4)
   })
 
-  it('no meta.title', async() => {
+  it('no meta.title', () => {
     router.push('/menu/menu1/menu1-2/menu1-2-2')
-    await wrapper.vm.$nextTick()
-    const len = wrapper.findAll('.el-breadcrumb__item').length
+    const len = wrapper.findAll('.el-breadcrumb__inner').length
     expect(len).toBe(3)
   })
 
-  it('noredirect', async() => {
-    router.push('/menu/menu1/menu1-2/menu1-2-1')
-    await wrapper.vm.$nextTick()
-    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__item')
-    const redirectBreadcrumb = breadcrumbArray.at(2)
-    const length = redirectBreadcrumb.findAll('a').length
-    expect(length).toBe(0)
-  })
-
-  it('click link', async() => {
+  it('click link', () => {
     router.push('/menu/menu1/menu1-2/menu1-2-2')
-    await wrapper.vm.$nextTick()
-    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__item')
+    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__inner')
     const second = breadcrumbArray.at(1)
     const href = second.find('a').text()
     expect(href).toBe('route.menu1')
   })
 
-  it('last breadcrumb', async() => {
+  it('noredirect', () => {
     router.push('/menu/menu1/menu1-2/menu1-2-1')
-    await wrapper.vm.$nextTick()
-    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__item')
+    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__inner')
+    const redirectBreadcrumb = breadcrumbArray.at(2)
+    expect(redirectBreadcrumb.contains('a')).toBe(false)
+  })
+
+  it('last breadcrumb', () => {
+    router.push('/menu/menu1/menu1-2/menu1-2-1')
+    const breadcrumbArray = wrapper.findAll('.el-breadcrumb__inner')
     const redirectBreadcrumb = breadcrumbArray.at(3)
-    const length = redirectBreadcrumb.findAll('a').length
-    expect(length).toBe(0)
+    expect(redirectBreadcrumb.contains('a')).toBe(false)
   })
 })

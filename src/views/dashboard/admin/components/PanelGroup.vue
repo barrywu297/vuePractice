@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import CountTo from 'vue-count-to'
 
 @Component({
@@ -134,7 +134,7 @@ import CountTo from 'vue-count-to'
 })
 export default class extends Vue {
   private handleSetLineChartData(type: string) {
-    this.$emit('handle-set-line-chart-data', type)
+    this.$emit('handleSetLineChartData', type)
   }
 }
 </script>

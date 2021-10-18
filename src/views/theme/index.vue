@@ -110,7 +110,6 @@ export default class extends Vue {
     { name: 'Tag Four', type: 'warning' },
     { name: 'Tag Five', type: 'danger' }
   ]
-
   private slideValue = 50
   private radio = 3
 

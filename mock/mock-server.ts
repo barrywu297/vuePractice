@@ -1,4 +1,5 @@
 import express from 'express'
+import bodyParser from 'body-parser'
 import compression from 'compression'
 import morgan from 'morgan'
 import cors from 'cors'
@@ -7,10 +8,12 @@ import path from 'path'
 import yaml from 'yamljs'
 import * as api from './api'
 import { accessTokenAuth } from './security'
-import { connector, summarise } from 'swagger-routes-express'
 
 const app = express()
 const port = 9528
+
+// 根据swagger api定义文件中的信息，动态生成接口路由
+const { connector, summarise } = require('swagger-routes-express')
 
 // Compression
 app.use(compression())
@@ -19,8 +22,8 @@ app.use(morgan('dev'))
 // Enable CORS
 app.use(cors())
 // POST, PUT, DELETE body parser
-app.use(express.json({ limit: '20mb' }))
-app.use(express.urlencoded({
+app.use(bodyParser.json({ limit: '20mb' }))
+app.use(bodyParser.urlencoded({
   limit: '20mb',
   extended: false
 }))
@@ -33,6 +36,7 @@ app.use((req, res, next) => {
 })
 
 // Read and swagger config file
+// 读取接口定义文件swagger.yml
 const apiDefinition = yaml.load(path.resolve(__dirname, 'swagger.yml'))
 // Create mock functions based on swaggerConfig
 const options = {
@@ -40,6 +44,7 @@ const options = {
     AccessTokenAuth: accessTokenAuth
   }
 }
+// 使用connector连接api定义文件和express路由系统
 const connectSwagger = connector(api, apiDefinition, options)
 connectSwagger(app)
 // Print swagger router api summary
@@ -47,7 +52,7 @@ const apiSummary = summarise(apiDefinition)
 console.log(apiSummary)
 
 // Catch 404 error
-app.use((req, res) => {
+app.use((req, res, next) => {
   const err = new Error('Not Found')
   res.status(404).json({
     message: err.message,

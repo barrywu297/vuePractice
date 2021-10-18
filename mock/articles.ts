@@ -9,7 +9,7 @@ const mockFullContent = '<p>I am testing data, I am testing data.</p><p><img src
 for (let i = 0; i < articleCount; i++) {
   articleList.push({
     id: i,
-    status: faker.random.arrayElement(['published', 'draft']),
+    status: faker.random.arrayElement(['published', 'draft', 'deleted']),
     title: faker.lorem.sentence(6, 10),
     abstractContent: faker.lorem.sentences(2),
     fullContent: mockFullContent,
@@ -17,12 +17,12 @@ for (let i = 0; i < articleCount; i++) {
     imageURL: faker.image.imageUrl(),
     timestamp: faker.date.past().getTime(),
     platforms: [faker.random.arrayElement(['a-platform', 'b-platform', 'c-platform'])],
-    disableComment: faker.datatype.boolean(),
-    importance: faker.datatype.number({ min: 1, max: 3 }),
+    disableComment: faker.random.boolean(),
+    importance: faker.random.number({ min: 1, max: 3}),
     author: faker.name.findName(),
     reviewer: faker.name.findName(),
     type: faker.random.arrayElement(['CN', 'US', 'JP', 'EU']),
-    pageviews: faker.datatype.number({ min: 300, max: 500 })
+    pageviews: faker.random.number({ min: 300, max: 500 })
   })
 }
 
@@ -32,7 +32,7 @@ export const getArticles = (req: Request, res: Response) => {
   let mockList = articleList.filter(item => {
     if (importance && item.importance !== +importance) return false
     if (type && item.type !== type) return false
-    if (title && item.title.indexOf(title as string) < 0) return false
+    if (title && item.title.indexOf(title) < 0) return false
     return true
   })
 
@@ -40,7 +40,7 @@ export const getArticles = (req: Request, res: Response) => {
     mockList = mockList.reverse()
   }
 
-  const pageList = mockList.filter((_, index) => index < (limit as number) * (page as number) && index >= (limit as number) * (page as number - 1))
+  const pageList = mockList.filter((_, index) => index < limit * page && index >= limit * (page - 1))
 
   return res.json({
     code: 20000,
@@ -100,7 +100,7 @@ export const updateArticle = (req: Request, res: Response) => {
 
 export const deleteArticle = (req: Request, res: Response) => {
   return res.json({
-    code: 20000
+    code: 20000,
   })
 }
 

@@ -23,8 +23,8 @@ export const elDraggableDialog: DirectiveOptions = {
       const minDragDomTop = dragDom.offsetTop
       const maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomHeight
 
-      const styleLeftStr = getComputedStyle(dragDom).left
-      const styleTopStr = getComputedStyle(dragDom).top
+      let styleLeftStr = getComputedStyle(dragDom)['left']
+      let styleTopStr = getComputedStyle(dragDom)['top']
       if (!styleLeftStr || !styleTopStr) return
       let styleLeft: number
       let styleTop: number
@@ -57,12 +57,12 @@ export const elDraggableDialog: DirectiveOptions = {
         // Move current element
         dragDom.style.cssText += `;left:${left + styleLeft}px;top:${top + styleTop}px;`
 
-        // Emit on-dialog-drag event
+        // Emit onDialogDrag event
         // See https://stackoverflow.com/questions/49264426/vuejs-custom-directive-emit-event
         if (vnode.componentInstance) {
-          vnode.componentInstance.$emit('on-dialog-drag')
+          vnode.componentInstance.$emit('onDialogDrag')
         } else if (vnode.elm) {
-          vnode.elm.dispatchEvent(new CustomEvent('on-dialog-drag'))
+          vnode.elm.dispatchEvent(new CustomEvent('onDialogDrag'))
         }
       }
 

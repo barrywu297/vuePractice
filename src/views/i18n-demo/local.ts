@@ -78,45 +78,5 @@ export default {
       two: '2',
       three: '3'
     }
-  },
-  ko: {
-    i18nView: {
-      title: '언어 변경',
-      note: '이 프로젝트의 국제화는 vue-i18n을 기반으로합니다',
-      datePlaceholder: '요일 선택',
-      selectPlaceholder: '선택',
-      tableDate: '테이블 날짜',
-      tableName: '테이블 이름',
-      tableAddress: '테이블 주소',
-      default: '고정 값',
-      primary: '1순위',
-      success: '성공',
-      info: '정보',
-      warning: '경고',
-      danger: '위험',
-      one: '하나',
-      two: '둘',
-      three: '셋'
-    }
-  },
-  it: {
-    i18nView: {
-      title: 'Cambia Lingua',
-      note: 'L\'internalizzazione di questo progetto è basata su vue-i18n',
-      datePlaceholder: 'Scegli un giorno',
-      selectPlaceholder: 'Seleziona',
-      tableDate: 'Data',
-      tableName: 'Nome',
-      tableAddress: 'Indirizzo',
-      default: 'default',
-      primary: 'primario',
-      success: 'successo',
-      info: 'info',
-      warning: 'attenzione',
-      danger: 'pericolo',
-      one: 'Uno',
-      two: 'Due',
-      three: 'Tre'
-    }
   }
 }

@@ -41,9 +41,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
           // Generate accessible routes map based on role
           PermissionModule.GenerateRoutes(roles)
           // Dynamically add accessible routes
-          PermissionModule.dynamicRoutes.forEach(route => {
-            router.addRoute(route)
-          })
+          router.addRoutes(PermissionModule.dynamicRoutes)
           // Hack: ensure addRoutes is complete
           // Set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
@@ -73,7 +71,6 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
 
 router.afterEach((to: Route) => {
   // Finish progress bar
-  // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
   NProgress.done()
 
   // set page title

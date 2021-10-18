@@ -3,9 +3,7 @@ const re = /\.\/(.*)\.svg/
 const requireAll = (requireContext: any) => requireContext.keys()
 
 const icons = requireAll(req).map((str: string) => {
-  const match = str.match(re)
-  if (match !== null) return match[1]
-  return null
+  return str.match(re)![1]
 })
 
 export default icons

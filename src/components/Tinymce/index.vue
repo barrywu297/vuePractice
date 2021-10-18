@@ -13,35 +13,26 @@
       <editor-image-upload
         :color="uploadButtonColor"
         class="editor-upload-btn"
-        @success-callback="imageSuccessCBK"
+        @successCBK="imageSuccessCBK"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-// Docs: https://www.tiny.cloud/docs/advanced/usage-with-module-loaders/
-// Import TinyMCE
+// Docs: https://armour.github.io/vue-typescript-admin-docs/features/components/rich-editor.html#tinymce
 import 'tinymce/tinymce'
-// Default icons are required for TinyMCE 5.3 or above
-import 'tinymce/icons/default'
-// Import themes
-import 'tinymce/themes/silver'
+import 'tinymce/themes/silver' // Import themes
 import 'tinymce/themes/mobile'
-// Any plugins you want to use has to be imported
-import 'tinymce/plugins/advlist'
+import 'tinymce/plugins/advlist' // Any plugins you want to use has to be imported
 import 'tinymce/plugins/anchor'
-import 'tinymce/plugins/autoresize'
 import 'tinymce/plugins/autolink'
 import 'tinymce/plugins/autosave'
-import 'tinymce/plugins/charmap'
 import 'tinymce/plugins/code'
 import 'tinymce/plugins/codesample'
 import 'tinymce/plugins/directionality'
 import 'tinymce/plugins/emoticons'
-import 'tinymce/plugins/fullpage'
 import 'tinymce/plugins/fullscreen'
-import 'tinymce/plugins/help'
 import 'tinymce/plugins/hr'
 import 'tinymce/plugins/image'
 import 'tinymce/plugins/imagetools'
@@ -93,14 +84,12 @@ export default class extends Vue {
   private hasInit = false
   private fullscreen = false
   // https://www.tiny.cloud/docs/configure/localization/#language
-  // when adding a new language, please also add the corresponding lang file under public/tinymce/langs folder
+  // and also see langs files under public/tinymce/langs folder
   private languageTypeList: { [key: string]: string } = {
-    en: 'en',
-    zh: 'zh_CN',
-    es: 'es',
-    ja: 'ja',
-    ko: 'ko_KR',
-    it: 'it'
+    'en': 'en',
+    'zh': 'zh_CN',
+    'es': 'es',
+    'ja': 'ja'
   }
 
   get language() {
@@ -132,7 +121,7 @@ export default class extends Vue {
     return {
       selector: `#${this.id}`,
       height: this.height,
-      body_class: 'panel-body',
+      body_class: 'panel-body ',
       object_resizing: false,
       toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
       menubar: this.menubar,
@@ -150,11 +139,7 @@ export default class extends Vue {
       imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
       default_link_target: '_blank',
       link_title: false,
-      // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
-      nonbreaking_force_tab: true,
-      // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
-      // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
-      convert_urls: false,
+      nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
       init_instance_callback: (editor: any) => {
         if (this.value) {
           editor.setContent(this.value)
@@ -209,12 +194,11 @@ export default class extends Vue {
   position: absolute;
   right: 6px;
   top: 6px;
-  z-index: 1002;
-}
 
-.fullscreen .editor-custom-btn-container {
-  z-index: 10000;
-  position: fixed;
+  &.fullscreen {
+    z-index: 10000;
+    position: fixed;
+  }
 }
 
 .editor-upload-btn {
