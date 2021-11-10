@@ -57,8 +57,8 @@ export interface Player {
   accountname: string, // 账号名
   nickname: string, // 昵称
   avatar: string, // 用户头像
-  level: number,// 用户等级
-  exp: number,// 经验值
+  level: number, // 用户等级
+  exp: number, // 经验值
   rank: number, // 段位
   bravepoints: number, // 勇者积分
   winningstreak: number, // 连胜场次

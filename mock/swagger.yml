@@ -13,6 +13,8 @@ servers:
 tags:
   - name: players
     description: 玩家相关接口
+  - name: customPlayers
+    description: 自定义玩家相关接口
   - name: articles
     description: Articles data related api.
   - name: roles
@@ -104,6 +106,74 @@ paths:
           description: OK
         401:
           $ref: "#/components/responses/Unauthorized"
+  /customPlayers:
+    get: #method类型
+      tags: #所属标签
+        - customPlayers
+      operationId: getCustomPlayers # 操作id，必要，映射到实现函数
+      summary: 获取自定义玩家信息列表 # 概要
+      description: 返回自定义玩家信息数组 # 详细描述
+      # 描述参数信息
+      parameters:
+        - name: accountname
+          in: query # 参数位于哪里
+          description: 用于过滤的账户名称
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 指定页码
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: limit
+          in: query
+          description: 每页条数
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        format: int32
+                      players:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Player"
+    post: #在get后面增加一个post定义
+      tags: #所属标签
+        - CustomPlayers
+      operationId: createCustomPlayer # 操作id，必要，映射到实现函数
+      summary: 新增玩家信息 # 概要
+      description: 创建玩家并返回创建玩家的数据 # 详细描述
+      # 描述参数信息
+      parameters:
+        - name: player
+          in: query # 参数位于哪里
+          description: 新建玩家数据
+          schema:
+            $ref: "#/components/schemas/Player"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/Unauthorized"
   /players/{id}: #多了一个参数
     get:
       tags:
@@ -160,6 +230,87 @@ paths:
       summary: 删除玩家信息
       description: 删除指定id玩家信息
       operationId: deletePlayer
+      security:
+        - AccessTokenAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 玩家id.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+  /customPlayers/{id}: #多了一个参数
+    get:
+      tags:
+        - customPlayers
+      summary: 获取指定自定义玩家信息
+      operationId: getCustomPlayer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 玩家id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+    put: # 在get后面定义put接口
+      tags:
+        - customPlayers
+      summary: 更新玩家信息
+      description: 更新指定id的玩家信息
+      operationId: updateCustomPlayer
+      security:
+        - AccessTokenAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 玩家id
+          schema:
+            type: integer
+            format: int64
+        - name: player
+          in: query
+          required: true
+          description: 要更新的玩家数据
+          schema:
+            $ref: "#/components/schemas/Player"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - customPlayers
+      summary: 删除玩家信息
+      description: 删除指定id玩家信息
+      operationId: deleteCustomPlayer
       security:
         - AccessTokenAuth: []
       parameters:
