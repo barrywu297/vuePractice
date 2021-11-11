@@ -1,4 +1,4 @@
-import { RouteConfig } from 'vue-router';
+import { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
 export const playerRoutes: RouteConfig = {
